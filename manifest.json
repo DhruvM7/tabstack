@@ -26,7 +26,12 @@
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "content_scripts": [{
       "matches": ["<all_urls>"],
-      "js": ["js/eventLogger.js"]
+      "js": [
+        "js/lib/lda.js",
+        "js/lib/textextract.js",
+        "js/lib/eventLogger.js",
+        "js/lib/tabstacker.js"
+      ]
     }],
     "manifest_version": 2
 }
