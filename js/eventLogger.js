@@ -29,6 +29,7 @@ function pageDeactivateHandler() {
 }
 
 function updateStorage() {
+    
 }
 
 function initLogger() {
