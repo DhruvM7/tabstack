@@ -7,14 +7,13 @@ var Database = new function() {
 	buckettable = new PouchDB("Buckets");
 	linktable = new PouchDB("Links");
 
-
-	this.insertBucket = function(topics,queries,linklist,timestamp) {
+	this.insertBucket = function(bucketObject) {
 		var doc = {
 			"_id": bucketcount++,
-			"relevantTopics": topics,
-			"queryStrings": queries,
-			"linklist": linklist,
-			"timeStamp": timestamp,
+			"relevantTopics": bucketObject.topics,
+			"queryStrings": bucketObject.queries,
+			"linklist": bucketObject.linklist,
+			"timeStamp": bucketObject.timestamp,
 		};
 		buckettable.put(doc, function callback(err, result) {
 	    	if (!err) {
@@ -27,11 +26,14 @@ var Database = new function() {
 		var doc = {
 			"_id": linkObject.url,
 			"url": linkObject.url,
+			"title": linkObject.title,
 			"clickcount": linkObject.clickcount,
 			"maxScrollHeight": linkObject.maxScrollHeight,
 			"lastScrollHeight": linkObject.lastScrollHeight,
-			"activeTime": linkObject.activeTime,
+			"startTime": linkObject.startTime,
+			"totalTime": linkObject.totalTime,
 			"copycount": linkObject.copycount
+
 		};
 		return linktable.put(doc, function callback(err, result) {
 	    	if (!err) {
@@ -40,10 +42,22 @@ var Database = new function() {
   		});
 	}
 
-	this.getAllBuckets = () => {
+	this.getAllLinks = () => {
 		var returnResolve;
 
 		linktable.allDocs({include_docs: true, descending: true}, function(err, doc) {
+	    	returnResolve(doc.rows);
+	  	});
+
+	  	return new Promise(function(resolve, reject) {
+			returnResolve = resolve;
+		});
+	}
+
+	this.getAllBuckets = () => {
+		var returnResolve;
+
+		buckettable.allDocs({include_docs: true, descending: true}, function(err, doc) {
 	    	returnResolve(doc.rows);
 	  	});
 
@@ -66,16 +80,27 @@ var Database = new function() {
 		updateLink(data)
 	}
 
-	this.updateBucket = () => {
-
+	this.updateBucket = (bucketObject, linkObject) => {
+		//bucketObject will be fetched once before while matching
+		//correletions
+		//Thus we will get the bucket object relevant to the linkObject
+		// No need to get the object
+		buckettable.put({
+			"_id": bucketObject.url,
+			"queryStrings": bucketObject.queryStrings.push(""),
+			"linklist": bucketObject.linklist.push(linkObject._id),
+		}).then(function(response){
+			
+		}).catch(function(err){
+		}); 
 	}
 
 	this.updateLink = (linkObject) => {
 		linktable.get(linkObject.url).then(function(doc){
 			return linktable.put({
-				"_id": linkObject.url,
+				"_id":doc.url,
 				_rev: doc._rev,
-				"url": linkObject.url,
+				"title": linkObject.title,
 				"clickcount": linkObject.clickcount + doc.clickcount,
 				"maxScrollHeight": doc.maxScrollHeight > linkObject.maxScrollHeight ? doc.maxScrollHeight: linkObject.maxScrollHeight,
 				"lastScrollHeight": linkObject.lastScrollHeight,

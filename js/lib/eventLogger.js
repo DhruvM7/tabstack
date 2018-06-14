@@ -1,10 +1,11 @@
 
-Database = chrome.extension.getBackgroundPage().Database;
+// Database = chrome.extension.getBackgroundPage().Database;
 
 var EventLogger = new function () {
 
     var data = {
         url: null,
+        title: null,
         clickCount: 0,
         copyCount: 0,
         startTime: null,
@@ -25,7 +26,7 @@ var EventLogger = new function () {
         }, () => {
             data.startTime = Date.now();
             data.clickCount = 0;
-        });;
+        });
 
         pageActive = true;
     }
@@ -62,5 +63,5 @@ var EventLogger = new function () {
     }
 
     data.url = document.location.href;
-
+    data.title = document.head.title;
 };
