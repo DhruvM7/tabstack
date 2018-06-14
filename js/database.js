@@ -23,14 +23,16 @@ var Database = new function() {
   		});
 	}
 
-	this.insertLink = (url,clickcount,scrollPos,activeTime,copied) => {
+	this.insertLink = (data) => {
 		var doc = {
-			"_id": url,
-			"url": url,
-			"clickcount": clickcount,
-			"scrollPos": scrollPos,
-			"activeTime": activeTime,
-			"copied": copied
+			"_id": data.url,
+			"url": data.url,
+			"clickCount": data.clickCount,
+			"copyCount": data.copyCount,
+			"startTime": data.startTime,
+			"maxScrollHeight": data.maxScrollHeight,
+			"lastScrollHeight": data.lastScrollHeight,
+			"totalTime": data.totalTime
 		};
 		return linktable.put(doc, function callback(err, result) {
 	    	if (!err) {
@@ -49,6 +51,16 @@ var Database = new function() {
 	  	return new Promise(function(resolve, reject) {
 			returnResolve = resolve;
 		});
+	}
+
+	this.getUrlHistory = (url) => {
+		return linktable.get(url);
+	}
+
+	this.getBucketFromUrl = (url) => {
+		return buckettable.find({
+			selector: {url: url},
+		  })
 	}
 
 	function updateBucket() {

@@ -1,3 +1,6 @@
+
+Database = chrome.extension.getBackgroundPage().Database;
+
 var EventLogger = new function () {
 
     var data = {
@@ -17,9 +20,14 @@ var EventLogger = new function () {
     }
 
     function activatePage() {
+        Database.getUrlHistory(data.url).then((doc) => {
+            data = doc;
+        }, () => {
+            data.startTime = Date.now();
+            data.clickCount = 0;
+        });;
+
         pageActive = true;
-        data.clickCount = 0;
-        data.startTime = Date.now();
     }
 
     function scrollPositionUpdate(e) {
@@ -39,7 +47,6 @@ var EventLogger = new function () {
     }
 
     function updateStorage() {
-        Database = chrome.extension.getBackgroundPage().Database;
         Database.updateStorage(data);
     }
 
