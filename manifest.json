@@ -25,7 +25,7 @@
     },
     "content_scripts": [{
       "matches": ["*"],
-      "js": ["src/inject.js"]
+      "js": ["src/eventLogger.js"]
     }],
     "manifest_version": 2
 }
