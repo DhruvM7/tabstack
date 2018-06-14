@@ -13,7 +13,7 @@ var EventLogger = new function() {
     var pageActive = false;
     
     function onClickHandler(e) {
-        clickCount++;
+        data.clickCount ++;
     }
     
     function activatePage() {
