@@ -4,8 +4,8 @@ var Database = new function() {
 	var linktable;
 	var bucketcount = 0;
 
-		buckettable = new PouchDB("Buckets");
-		linktable = new PouchDB("Links");
+	buckettable = new PouchDB("Buckets");
+	linktable = new PouchDB("Links");
 
 
 	this.insertBucket = function(topics,queries,linklist,timestamp) {
@@ -61,6 +61,12 @@ var Database = new function() {
 		return buckettable.find({
 			selector: {url: url},
 		  })
+	}
+
+	function updateStorage() {
+		// check if link already exists in table
+		// if yes, update with new data
+		// if no, add
 	}
 
 	function updateBucket() {
