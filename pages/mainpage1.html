@@ -4,8 +4,40 @@
 	<title>TabStack</title>
 	<script type="text/javascript" src="/js/vue.js"></script>
 	<style type="text/css">
+		body {
+			margin: 0;
+		}
+		#header {
+			text-align: center;
+			position: sticky;
+			top: 0px;
+			background: white;
+			box-shadow: 0px 0px 5px black;
+			margin-top: -18px;
+			padding-bottom: 1em;
+		}
+		#header .checkbox {
+			font-size: 1.2em;
+			margin-right: 1em;
+			display: inline-block;
+		}
+		#header .checkbox a {
+			text-decoration: none;
+			opacity: 0.5;
+		}
+		.activeSort {
+			color: red;
+			opacity: 1 !important;
+		}
 		#content{
 			font-size: 1.3em;
+			margin: 15px 5vw;
+		}
+		.bucket {
+			display: inline-block;
+			width: 40vw;
+			vertical-align: top;
+			margin-right: 5vw;
 		}
 		.bucket h2 {
 			display: inline-block;
@@ -14,10 +46,14 @@
 		}
 		.bucket .inline-tag {
 			display: inline-block;
-			margin: 2px 0.75em;
+			padding: 3px;
+			margin: 2px 7px 2px 0px;
+			border: 2px solid black;
+			border-radius: 5px;
 		}
 		table {
 			border-collapse: collapse;
+			margin-top: 10px;
 		}
 		tr {
 			border-bottom: 2px solid grey;
@@ -29,23 +65,34 @@
 	<link rel="stylesheet" type="text/css" href="/css/table.css">
 </head>
 <body>
-	<h1>TabStack 1</h1>
+	<div id="header">
+		<h1>TabStack History</h1>
+		<div id="checkboxes">
+			<template v-for="key in optionalItemKeys">
+				<div class="checkbox">
+					<input type="checkbox" v-model="key.show"> 
+					<label for="checkbox">{{ key.uiName }}</label>
+					<a v-if="key.numericSort" href="" 
+						:class="key.keyName === currentSort.sortKey ? 'activeSort' : ''"
+						v-on:click.prevent="sortByNumeric(key.keyName)"
+						v-text="currentSort.sortedIncreasing ? '&#x25B2;' : '&#x25BC;'"></a>
+				</div>
+			</template>
+		</div>
+	</div>
 	<div id="content">
 		<div class="bucket" v-for="bucket in buckets">
 			<h2> {{ bucket.title }} </h2> 
-			<h3 v-for="topic in bucket.topics" class="inline-tag"> {{topic}} </h3>
+			<h4 v-for="topic in bucket.topics" class="inline-tag"> {{topic}} </h4>
 			<div v-if="bucket.searches">
-				You searched for: <h4 v-for="search in bucket.searches" class="inline-tag"> {{search}} </h4>
+				You searched for:
+				<span v-for="search in bucket.searches"> "<em>{{search}}</em>" </span>
 			</div>
 			<table class="formatHTML5">
 				<thead>
 					<tr>
 						<td>Page</td>
-						<td>Time Stamp</td>
-						<td>Time Spent</td>
-						<td>Copy</td>
-						<td>Clicks</td>
-						<td>Scroll</td>
+						<td v-for="key in optionalItemKeys" v-if="key.show">{{ key.uiName }}</td>
 					</tr>
 				</thead>
 				<tbody>
@@ -53,20 +100,8 @@
 						<td>
 							<a :href="item.url" target="_blank">{{ item.title }}</a>
 						</td>
-						<td>
-							{{ item.timestamp }}
-						</td>
-						<td>
-							{{ item.timeSpent }} sec
-						</td>
-						<td>
-							{{ item.copy }}
-						</td>
-						<td>
-							{{ item.clicks }}
-						</td>
-						<td>
-							{{ item.scroll }} px
+						<td v-for="key in optionalItemKeys" v-if="key.show">
+							{{ item[key.keyName] }}
 						</td>
 					</tr>
 				</tbody>
