@@ -1,9 +1,11 @@
-var data = {
-    id: null,
+var linksData = {
+    // id: null,
     url: null,
     clickCount: 0,
+    copyCount: 0,
     startTime: null,
-    maxScroll: 0
+    maxScrollHeight: 0,
+    lastScrollHeight: 0
 }
 
 var pageActive = false;
@@ -14,18 +16,23 @@ function onClickHandler(e) {
 
 function activatePage() {
     pageActive = true;
-    data.clickCount = 0;
-    data.startTime = Date.now();
+    linksData.clickCount = 0;
+    linksData.startTime = Date.now();
 }
 
 function scrollPositionUpdate(e) {
     var pos = window.scrollY + window.innerHeight/2;
-    maxScroll = pos > maxScroll ? pos : maxScroll;
+    maxScrollHeight = pos > maxScrollHeight ? pos : maxScrollHeight;
+    lastScrollHeight = pos;
 }
 
 function pageDeactivateHandler() {
     pageActive = false;
     updateStorage();
+}
+
+function copyEventHandler() {
+    copyCount ++;
 }
 
 function updateStorage() {
@@ -38,8 +45,9 @@ function initLogger() {
     document.addEventListener("scroll", scrollPositionUpdate);
     document.addEventListener("blur", pageDeactivateHandler)
     document.addEventListener("focus", activatePage);
+    document.addEventListener("copy", copyEventHandler);
     
     activatePage();
 }
 
-data.url = document.location.href;
+linksData.url = document.location.href;
