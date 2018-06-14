@@ -35,10 +35,13 @@
 			margin: 15px 5vw;
 		}
 		.bucket {
-			display: inline-block;
-			width: 40vw;
+			/*display: inline-block;*/
+			width: 80vw;
 			vertical-align: top;
-			margin-right: 4vw;
+			margin: 25px auto;
+			padding: 10px;
+			box-shadow: 0px 0px 5px black;
+			border-radius: 5px;
 		}
 		.bucket h2 {
 			display: inline-block;
@@ -83,13 +86,16 @@
 	</div>
 	<div id="content">
 		<div class="bucket" v-for="bucket in buckets">
-			<h2> {{ bucket.title }} </h2> 
+			<h2 @click="bucket.expanded = !bucket.expanded"> 
+				<span v-text="bucket.expanded ? '&#x25BC;' : '&#x25b6;'"></span>
+				{{ bucket.title }} 
+			</h2> 
 			<h4 v-for="topic in bucket.topics" class="inline-tag"> {{topic}} </h4>
 			<div v-if="bucket.searches">
 				You searched for:
 				<span v-for="search in bucket.searches"> "<em>{{search}}</em>" </span>
 			</div>
-			<table class="formatHTML5">
+			<table class="formatHTML5" v-show="bucket.expanded">
 				<thead>
 					<tr>
 						<td>Page</td>

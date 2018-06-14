@@ -3,12 +3,39 @@
 <head>
   <style>
     body {
-      min-width: 300px;
+      width: 300px;
+      margin: 0;
+    }
+    #header {
+      text-align: center;
     }
     #header * {
       display: inline-block;
       margin: 0;
       color: black;
+    }
+    #currentbucket {
+      margin: 15px;
+    }
+    #currentbucket a {
+      color: black;
+      text-decoration: none;
+      margin: 0.5em 0;
+    }
+    #currentbucket a:hover {
+      
+    }
+    .item {
+      display: block;
+      white-space: nowrap; 
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .title {
+      font-size: 1.5em;
+    }
+    .item:hover .title {
+      text-decoration: underline;
     }
   </style>
   <script type="text/javascript" src="/js/vue.js"></script>
@@ -17,10 +44,13 @@
     <div id="header">
       <h2>TabStack | <a href="/pages/mainpage1.html" target="_blank">History</a></h2>
     </div>
+    
+    <hr color="grey">
+
     <div id="currentbucket">
-      <h4>Current Buckets:</h4>
-      <div v-for="item in items">
-        <a :href="item.url" target="_blank">{{item.title}}</a>
+      <h3>Current Bucket:</h3>
+      <div v-for="item in items" class="item">
+        <a :href="item.url" target="_blank"><span class="title">{{item.title}}</span> <br> {{item.url}}</a>
       </div>
     </div>
     <script src="/js/popup.js"></script>
