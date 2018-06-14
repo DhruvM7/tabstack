@@ -4,8 +4,8 @@
     "description": "TabStack",
     "permissions": ["activeTab", "declarativeContent", "storage"],
     "background": {
-      "scripts": ["js/background.js"],
-      "persistent": false
+      "scripts": ["js/pouchdb.min.js", "js/database.js"],
+      "persistent": true
     },
     "options_page": "pages/options.html",
     "browser_action": {

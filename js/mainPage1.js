@@ -1,4 +1,10 @@
-console.log('MainPage');
+Database = chrome.extension.getBackgroundPage().Database;
+console.log('kk');
+Database.insertLink("https://github.com/Mahak-10",4,6,2,6);
+
+Database.getAllBuckets().then((rows) => {
+	console.log(rows);
+});
 
 var data = {
 	buckets: [
@@ -15,7 +21,7 @@ var data = {
 			title: 'Bucket 2',
 			topics: ['C#', 'Azure API'],
 			items: [{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '10', copy: '2', clicks: '5', scroll: '100'},
-					{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '5', copy: '4', clicks: '7', scroll: '180'},
+					{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '	 today', timeSpent: '5', copy: '4', clicks: '7', scroll: '180'},
 					{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '7', copy: '1', clicks: '2', scroll: '263'}
 			]
 		}
