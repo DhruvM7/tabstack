@@ -1,50 +1,66 @@
-var EventLogger = new function() {
+
+Database = chrome.extension.getBackgroundPage().Database;
+
+var EventLogger = new function () {
 
     var data = {
-        id: null,
         url: null,
         clickCount: 0,
+        copyCount: 0,
         startTime: null,
-        maxScroll: 0
+        maxScrollHeight: 0,
+        lastScrollHeight: 0,
+        totalTime: 0
     }
-    
+
     var pageActive = false;
-    
+
     function onClickHandler(e) {
-        clickCount++;
+        data.clickCount++;
     }
-    
+
     function activatePage() {
+        Database.getUrlHistory(data.url).then((doc) => {
+            data = doc;
+        }, () => {
+            data.startTime = Date.now();
+            data.clickCount = 0;
+        });;
+
         pageActive = true;
-        data.clickCount = 0;
-        data.startTime = Date.now();
     }
-    
+
     function scrollPositionUpdate(e) {
-        var pos = window.scrollY + window.innerHeight/2;
-        data.maxScroll = pos > data.maxScroll ? pos : data.maxScroll;
+        var pos = window.scrollY + window.innerHeight / 2;
+        data.maxScrollHeight = pos > data.maxScrollHeight ? pos : data.maxScrollHeight;
+        data.lastScrollHeight = pos;
     }
-    
+
     function pageDeactivateHandler() {
         pageActive = false;
+        totalTime += Date.now() - data.startTime;
         updateStorage();
     }
-    
-    function updateStorage() {
-        
+
+    function copyEventHandler() {
+        data.copyCount++;
     }
-    
-    this.initLogger = function() {
+
+    function updateStorage() {
+        Database.updateStorage(data);
+    }
+
+    this.initLogger = function () {
         document.addEventListener("click", onClickHandler);
         document.addEventListener("beforeunload", pageDeactivateHandler);
         document.addEventListener("scroll", scrollPositionUpdate);
         document.addEventListener("blur", pageDeactivateHandler)
         document.addEventListener("focus", activatePage);
-        
+        document.addEventListener("copy", copyEventHandler);
+
         activatePage();
-    
     }
-    
+
     data.url = document.location.href;
 
 };
