@@ -4,8 +4,10 @@ var EventLogger = new function() {
         id: null,
         url: null,
         clickCount: 0,
+        copyCount: 0,
         startTime: null,
-        maxScroll: 0
+        maxScrollHeight: 0,
+        lastScrollHeight: 0
     }
     
     var pageActive = false;
@@ -22,12 +24,17 @@ var EventLogger = new function() {
     
     function scrollPositionUpdate(e) {
         var pos = window.scrollY + window.innerHeight/2;
-        data.maxScroll = pos > data.maxScroll ? pos : data.maxScroll;
+        data.maxScrollHeight = pos > data.maxScrollHeight ? pos : data.maxScrollHeight;
+        data.lastScrollHeight = pos;
     }
     
     function pageDeactivateHandler() {
         pageActive = false;
         updateStorage();
+    }
+
+    function copyEventHandler() {
+        data.copyCount ++;
     }
     
     function updateStorage() {
@@ -40,6 +47,7 @@ var EventLogger = new function() {
         document.addEventListener("scroll", scrollPositionUpdate);
         document.addEventListener("blur", pageDeactivateHandler)
         document.addEventListener("focus", activatePage);
+        document.addEventListener("copy", copyEventHandler);
         
         activatePage();
     
