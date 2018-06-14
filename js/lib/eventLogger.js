@@ -22,7 +22,7 @@ var EventLogger = new function () {
 
     function activatePage() {
         Database.getUrlHistory(data.url).then((doc) => {
-            data = doc;
+            data = doc ? doc : data;
         }, () => {
             data.startTime = Date.now();
             data.clickCount = 0;
@@ -39,7 +39,7 @@ var EventLogger = new function () {
 
     function pageDeactivateHandler() {
         pageActive = false;
-        totalTime += Date.now() - data.startTime;
+        data.totalTime += Date.now() - data.startTime;
         updateStorage();
     }
 
