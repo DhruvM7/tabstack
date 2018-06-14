@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TabStack</title>
+	<script type="text/javascript" src="/js/vue.js"></script>
+	<style type="text/css">
+		#content{
+			font-size: 1.3em;
+		}
+		.bucket h2 {
+			display: inline-block;
+			margin-bottom: 0;
+			margin-right: 1em;
+		}
+		.bucket .inline-tag {
+			display: inline-block;
+			margin: 2px 0.75em;
+		}
+		table {
+			border-collapse: collapse;
+		}
+		tr {
+			border-bottom: 2px solid grey;
+		}
+		td {
+			padding: 5px;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="/css/table.css">
+</head>
+<body>
+	<h1>TabStack 1</h1>
+	<div id="content">
+		<div class="bucket" v-for="bucket in buckets">
+			<h2> {{ bucket.title }} </h2> 
+			<h3 v-for="topic in bucket.topics" class="inline-tag"> {{topic}} </h3>
+			<div v-if="bucket.searches">
+				You searched for: <h4 v-for="search in bucket.searches" class="inline-tag"> {{search}} </h4>
+			</div>
+			<table class="formatHTML5">
+				<thead>
+					<tr>
+						<td>Page</td>
+						<td>Time Stamp</td>
+						<td>Time Spent</td>
+						<td>Copy</td>
+						<td>Clicks</td>
+						<td>Scroll</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="item in bucket.items">
+						<td>
+							<a :href="item.url" target="_blank">{{ item.title }}</a>
+						</td>
+						<td>
+							{{ item.timestamp }}
+						</td>
+						<td>
+							{{ item.timeSpent }} sec
+						</td>
+						<td>
+							{{ item.copy }}
+						</td>
+						<td>
+							{{ item.clicks }}
+						</td>
+						<td>
+							{{ item.scroll }} px
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<script type="text/javascript" src="/js/mainPage1.js"></script>
+</body>
+</html>
