@@ -1,8 +1,8 @@
-
 var Database = new function() {
 	var buckettable;
 	var linktable;
 	var bucketcount = 0;
+	var linkcount = 0;
 
 	buckettable = new PouchDB("Buckets");
 	linktable = new PouchDB("Links");
@@ -18,25 +18,24 @@ var Database = new function() {
 		};
 		buckettable.put(doc, function callback(err, result) {
 	    	if (!err) {
-	      		console.log('Successfully posted a todo!');
+	      		console.log('Successfully inserted a Bucket!');
 	      	}
   		});
 	}
 
-	this.insertLink = (data) => {
+	this.insertLink = (linkObject) => {
 		var doc = {
-			"_id": data.url,
-			"url": data.url,
-			"clickCount": data.clickCount,
-			"copyCount": data.copyCount,
-			"startTime": data.startTime,
-			"maxScrollHeight": data.maxScrollHeight,
-			"lastScrollHeight": data.lastScrollHeight,
-			"totalTime": data.totalTime
+			"_id": linkObject.url,
+			"url": linkObject.url,
+			"clickcount": linkObject.clickcount,
+			"maxScrollHeight": linkObject.maxScrollHeight,
+			"lastScrollHeight": linkObject.lastScrollHeight,
+			"activeTime": linkObject.activeTime,
+			"copycount": linkObject.copycount
 		};
 		return linktable.put(doc, function callback(err, result) {
 	    	if (!err) {
-	      		console.log('Successfully posted a todo!');
+	      		console.log('Successfully inserted a Link!');
 	      	}
   		});
 	}
@@ -63,18 +62,32 @@ var Database = new function() {
 		  })
 	}
 
-	function updateStorage() {
-		// check if link already exists in table
-		// if yes, update with new data
-		// if no, add
+	this.updateStorage = (data) => {
+		updateLink(data)
 	}
 
-	function updateBucket() {
+	this.updateBucket = () => {
 
 	}
 
-	function updateLink() {
+	this.updateLink = (linkObject) => {
+		linktable.get(linkObject.url).then(function(doc){
+			return linktable.put({
+				"_id": linkObject.url,
+				_rev: doc._rev,
+				"url": linkObject.url,
+				"clickcount": linkObject.clickcount + doc.clickcount,
+				"maxScrollHeight": doc.maxScrollHeight > linkObject.maxScrollHeight ? doc.maxScrollHeight: linkObject.maxScrollHeight,
+				"lastScrollHeight": linkObject.lastScrollHeight,
+				"activeTime": linkObject.activeTime + doc.activeTime,
+				"copycount": linkObject.copycount + doc.copycount
 
+			});
+		}).then(function(response){
+
+		}).catch(function(err){
+			linktable.insertLink(linkObject);
+		});
 	}
 
 }
