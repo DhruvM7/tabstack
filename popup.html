@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <style>
-      button {
-        height: 30px;
-        width: 30px;
-        outline: none;
-      }
-    </style>
-  </head>
-  <body>
-    <button id="changeColor"></button>
+<head>
+  <style>
+    button {
+      height: 30px;
+      width: 30px;
+      outline: none;
+    }
+  </style>
+  <script type="text/javascript" src="./js/vue.js"></script>
+</head>
+<body>
+    <h3>TabStack</h3>
+    <div id="currentbucket">
+      <h4>Current Bucket</h4>
+      <div v-for="item in items">
+        <a :href="item.url" target="_blank">{{item.title}}</a>
+      </div>
+    </div>
     <script src="popup.js"></script>
-  </body>
+</body>
 </html>
