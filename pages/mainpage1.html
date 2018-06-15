@@ -88,7 +88,7 @@
 	</div>
 	<div id="content">
 		<div class="bucket" v-for="bucket in buckets">
-			<h2 @click="bucket.expanded = !bucket.expanded"> 
+			<h2 @click="clickHandler(bucket)"> 
 				<span v-text="bucket.expanded ? '&#x25BC;' : '&#x25b6;'"></span>
 				{{ bucket.title }} 
 			</h2> 

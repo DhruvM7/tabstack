@@ -1,5 +1,4 @@
 Database = chrome.extension.getBackgroundPage().Database;
-console.log('kk');
 Database.insertLink("https://github.com/Mahak-10",4,6,2,6);
 
 Database.getAllBuckets().then((rows) => {
@@ -20,51 +19,101 @@ var optionalItemKeys = [
 
 var data = {
 	optionalItemKeys: optionalItemKeys,
-	buckets: [
-		{
-			title: 'Bucket 1',
-			topics: ['Mughal Emperors', 'Akbar'],
-			searches: ['akbar life', 'akbar art'],
-			items: [{url: 'https://google.com', title: 'Google', timestamp: '6pm today', timeSpent: '10', copy: '2', clicks: '5', scroll: '100'},
-					{url: 'https://google.com', title: 'Google', timestamp: '6pm today', timeSpent: '5', copy: '4', clicks: '7', scroll: '145'},
-					{url: 'https://google.com', title: 'Google', timestamp: '6pm today', timeSpent: '7', copy: '1', clicks: '2', scroll: '270'}
-			],
-			expanded: true
-		},
-		{
-			title: 'Bucket 2',
-			topics: ['C#', 'Azure API'],
-			items: [{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '10', copy: '2', clicks: '5', scroll: '100'},
-					{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '5', copy: '4', clicks: '7', scroll: '180'},
-					{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '7', copy: '1', clicks: '2', scroll: '263'}
-			],
-			expanded: true
-		},
-		{
-			title: 'Bucket 3',
-			topics: ['C#', 'Azure API'],
-			items: [{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '10', copy: '2', clicks: '5', scroll: '100'},
-					{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '5', copy: '4', clicks: '7', scroll: '180'},
-					{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '7', copy: '1', clicks: '2', scroll: '263'}
-			],
-			expanded: true
-		},
-		{
-			title: 'Bucket 4',
-			topics: ['C#', 'Azure API'],
-			items: [{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '10', copy: '2', clicks: '5', scroll: '100'},
-					{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '5', copy: '4', clicks: '7', scroll: '180'},
-					{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '7', copy: '1', clicks: '2', scroll: '263'}
-			],
-			expanded: true
-		}
-	]
+	buckets: []
+}
+
+// var data = {
+// 	optionalItemKeys: optionalItemKeys,
+// 	buckets: [
+// 		{
+// 			title: 'Bucket 1',
+// 			topics: ['Mughal Emperors', 'Akbar'],
+// 			searches: ['akbar life', 'akbar art'],
+// 			items: [{url: 'https://google.com', title: 'Google', timestamp: '6pm today', timeSpent: '10', copy: '2', clicks: '5', scroll: '100'},
+// 					{url: 'https://google.com', title: 'Google', timestamp: '6pm today', timeSpent: '5', copy: '4', clicks: '7', scroll: '145'},
+// 					{url: 'https://google.com', title: 'Google', timestamp: '6pm today', timeSpent: '7', copy: '1', clicks: '2', scroll: '270'}
+// 			],
+// 			expanded: true
+// 		},
+// 		{
+// 			title: 'Bucket 2',
+// 			topics: ['C#', 'Azure API'],
+// 			items: [{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '10', copy: '2', clicks: '5', scroll: '100'},
+// 					{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '5', copy: '4', clicks: '7', scroll: '180'},
+// 					{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '7', copy: '1', clicks: '2', scroll: '263'}
+// 			],
+// 			expanded: true
+// 		},
+// 		{
+// 			title: 'Bucket 3',
+// 			topics: ['C#', 'Azure API'],
+// 			items: [{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '10', copy: '2', clicks: '5', scroll: '100'},
+// 					{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '5', copy: '4', clicks: '7', scroll: '180'},
+// 					{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '7', copy: '1', clicks: '2', scroll: '263'}
+// 			],
+// 			expanded: true
+// 		},
+// 		{
+// 			title: 'Bucket 4',
+// 			topics: ['C#', 'Azure API'],
+// 			items: [{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '10', copy: '2', clicks: '5', scroll: '100'},
+// 					{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '5', copy: '4', clicks: '7', scroll: '180'},
+// 					{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '7', copy: '1', clicks: '2', scroll: '263'}
+// 			],
+// 			expanded: true
+// 		}
+// 	]
+// }
+
+var bucket1 = {
+    "topics": ["Neural Networks", "Machine learning"],
+    "searches": ["Relevance of Neural Nets in Machine Learning"],
+    "linklist": [1,4,6],
+    "timeStamp": Date.now(),
+    "expanded": false
+}
+
+var bucket2 = {
+    "topics": ["Neural Networks", "Machine learning"],
+    "searches": ["Relevance of Neural Nets in Machine Learning"],
+    "linklist": [1,4,6],
+    "timeStamp": Date.now(),
+    "expanded": false
+}
+
+function getAllBuckets() {
+	data.buckets = [];
+	data.buckets.push(bucket1);
+	data.buckets.push(bucket2);
+}
+
+getAllBuckets();
+
+function getLinks(bucket) {
+	console.log("Getting Links from bucket", bucket);
+	var links =	[
+		{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '10', copy: '2', clicks: '5', scroll: '100'},
+		{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '5', copy: '4', clicks: '7', scroll: '180'},
+		{url: 'https://yahoo.com', title: 'Yahoo', timestamp: '6pm today', timeSpent: '7', copy: '1', clicks: '2', scroll: '263'}
+	];
+	console.log(links);
+	return links;
 }
 
 var contentVM = new Vue({
 	el: '#content',
-	data: data,
+	data:  data,
 	methods: {
+		resolveLinks: function(bucket) {
+			bucket.items = getLinks(bucket);
+			console.log("Resolving links for bucket", bucket);
+		},
+
+		clickHandler(bucket) {
+			this.resolveLinks(bucket);
+			bucket.expanded = !bucket.expanded;
+			console.log("Click Handler for bucket", bucket);
+		}
 	}
 })
 
