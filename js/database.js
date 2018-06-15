@@ -1,3 +1,7 @@
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
+	chrome.runtime.getBackgroundPage().console.log(request);
+});
+
 var Database = new function() {
 	var buckettable;
 	var linktable;
@@ -74,6 +78,18 @@ var Database = new function() {
 		return buckettable.find({
 			selector: {url: url},
 		  })
+	}
+
+	this.getLinksFromBucket = (bucketObject) => {
+		// var returnResolve;
+
+		// link.allDocs({include_docs: true, descending: true}, function(err, doc) {
+	    // 	returnResolve(doc.rows);
+	  	// });
+
+	  	// return new Promise(function(resolve, reject) {
+		// 	returnResolve = resolve;
+		// });
 	}
 
 	this.updateStorage = (data) => {

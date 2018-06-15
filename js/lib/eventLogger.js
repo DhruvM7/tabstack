@@ -1,5 +1,4 @@
-
-// Database = chrome.extension.getBackgroundPage().Database;
+// Database = chrome.runtime.getBackgroundPage().Database;
 
 var EventLogger = new function () {
 
@@ -14,20 +13,21 @@ var EventLogger = new function () {
         totalTime: 0
     }
 
-    var pageActive = false;
+    var pageActive = true;
 
     function onClickHandler(e) {
         data.clickCount++;
     }
 
     function activatePage() {
-        Database.getUrlHistory(data.url).then((doc) => {
-            data = doc ? doc : data;
-        }, () => {
-            data.startTime = Date.now();
-            data.clickCount = 0;
-        });
-
+        // Database.getUrlHistory(data.url).then((doc) => {
+        //     data = doc ? doc : data;
+        // }, () => {
+        //     data.startTime = Date.now();
+        //     data.clickCount = 0;
+        // });
+        data.startTime = Date.now();
+        data.clickCount = 0;
         pageActive = true;
     }
 
@@ -39,6 +39,7 @@ var EventLogger = new function () {
 
     function pageDeactivateHandler() {
         pageActive = false;
+        console.log("aaa");
         data.totalTime += Date.now() - data.startTime;
         updateStorage();
     }
@@ -48,14 +49,16 @@ var EventLogger = new function () {
     }
 
     function updateStorage() {
-        Database.updateStorage(data);
+        // Database.updateStorage(data);
+        databaseEvent();
     }
 
     this.initLogger = function () {
         document.addEventListener("click", onClickHandler);
         document.addEventListener("beforeunload", pageDeactivateHandler);
         document.addEventListener("scroll", scrollPositionUpdate);
-        document.addEventListener("blur", pageDeactivateHandler)
+        document.addEventListener("onunload", pageDeactivateHandler);
+        document.addEventListener("visibilitychange", pageDeactivateHandler);
         document.addEventListener("focus", activatePage);
         document.addEventListener("copy", copyEventHandler);
 
@@ -64,4 +67,19 @@ var EventLogger = new function () {
 
     data.url = document.location.href;
     data.title = document.head.title;
+
+    var databaseEvent = function() {
+        console.log("a");
+        var event = document.createEvent('Event');
+        event.data = {
+            area: "EventLogging",
+            payload: data
+        }
+        event.initEvent('databaseManagement');
+        document.dispatchEvent(event);
+    }
 };
+
+document.addEventListener("databaseManagement", function(event) {
+    chrome.runtime.sendMessage(event);
+});
